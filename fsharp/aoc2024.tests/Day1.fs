@@ -20,9 +20,21 @@ let day1Example () =
     Assert.AreEqual(11, day1 (List.ofArray exampleInput))
     ()
 
+[<Test>]
+let day1BExample () =
+    let exampleInput = example1.Split("\n")
+    Assert.AreEqual(31, day1B (List.ofArray exampleInput))
+    ()
+
 let input = File.ReadLines "./Day1.txt" |> List.ofSeq
 
 [<Test>]
 let day1A () =
-    Assert.AreEqual(0, day1 input)
+    Assert.AreEqual(2192892, day1 input)
     ()
+
+[<Test>]
+let day1B () =
+    Assert.AreEqual(22962826, day1B input)
+    ()    
+   
