@@ -19,3 +19,13 @@ module Map =
         match Map.tryFind key map with
         | None -> ifNone
         | Some item -> item
+        
+module Pair =
+    let map f (a, b) = (f a, f b)
+    
+    let curry f (a,b) = f a b
+    
+module String =
+    let split (pattern:string) (s: string) =
+        let parts = s.Split pattern
+        (parts.[0], parts.[1])
