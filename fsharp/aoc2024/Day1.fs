@@ -2,33 +2,25 @@
 
 let computeDistance (l1: int list, l2: int list) =
     let (sls, srs) = (List.sort l1, List.sort l2)
-    List.zip sls srs |>
-        List.map (fun (a,b) -> a - b |> abs) |> List.sum
+    List.zip sls srs |> List.map (fun (a, b) -> a - b |> abs) |> List.sum
 
 let computeSimilarity (l1: int list, l2: int list) =
-    let keys = l1
-    let lookup = List.countBy id l2 |> Map.ofList
-    
-    List.sumBy (fun k -> 
-        match lookup.TryGetValue k with
-        | true, v -> v * k
-        | _ -> 0) keys
-    
+    let lookupL = List.countBy id l1
+    let lookupR = List.countBy id l2 |> Map.ofList
+
+    List.sumBy
+        (fun (key, occ) ->
+            match lookupR.TryGetValue key with
+            | true, v -> occ * key * v
+            | _ -> 0)
+        lookupL
+
+let private splitLine (line: string) =
+    let parts = line.Split("   ")
+    (int parts.[0], int parts.[1])
+
 let day1 (input: string list) =
-    let splitLine (line: string) =
-        let parts = line.Split("   ")
-        (int parts.[0], int parts.[1])
-    
-    List.map splitLine input |>
-        List.unzip |>        
-        computeDistance
-    
-    
+    List.map splitLine input |> List.unzip |> computeDistance
+
 let day1B (input: string list) =
-    let splitLine (line: string) =
-        let parts = line.Split("   ")
-        (int parts.[0], int parts.[1])
-    
-    List.map splitLine input |>
-        List.unzip |>        
-        computeSimilarity
+    List.map splitLine input |> List.unzip |> computeSimilarity
