@@ -8,7 +8,8 @@ open NUnit.Framework
 let Setup () = ()
 
 
-let example1 = """7 6 4 2 1
+let example1 =
+    """7 6 4 2 1
 1 2 7 8 9
 9 7 6 2 1
 1 3 2 4 5
@@ -33,8 +34,8 @@ let input = File.ReadLines "./Day2.txt" |> List.ofSeq
 let day2A () =
     Assert.AreEqual(502, day2 input)
     ()
-    
+
 [<Test>]
 let day2B () =
     Assert.AreEqual(544, day2B input)
-    ()    
+    ()
