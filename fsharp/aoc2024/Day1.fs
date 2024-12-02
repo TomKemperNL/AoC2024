@@ -1,6 +1,6 @@
 ﻿module AoC2024.Day1
 
-open aoc2023.Shared
+open Shared
 
 let computeSimilarity (l1: int list, l2: int list) =
     let lookupL = List.countBy id l1
@@ -14,7 +14,7 @@ let computeSimilarity (l1: int list, l2: int list) =
 
 let day1 (input: string list) =
     input
-    |> List.map (String.split "   " >> Pair.map int)    
+    |> List.map (String.split2 "   " >> Pair.map int)    
     |> List.unzip
     |> Pair.map List.sort
     |> Pair.curry List.zip
@@ -22,6 +22,6 @@ let day1 (input: string list) =
     |> List.sum
 
 let day1B (input: string list) =
-    List.map (String.split "   " >> Pair.map int) input    
+    List.map (String.split2 "   " >> Pair.map int) input    
     |> List.unzip
     |> computeSimilarity

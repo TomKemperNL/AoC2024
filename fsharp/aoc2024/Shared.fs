@@ -1,4 +1,4 @@
-﻿module aoc2023.Shared
+﻿module AoC2024.Shared
 
 open System.Text.RegularExpressions
 
@@ -26,6 +26,10 @@ module Pair =
     let curry f (a,b) = f a b
     
 module String =
-    let split (pattern:string) (s: string) =
+    let split2 (pattern:string) (s: string) =
         let parts = s.Split pattern
         (parts.[0], parts.[1])
+        
+    let split (pattern:string) (s: string) =
+        let parts = s.Split pattern
+        List.ofArray parts
