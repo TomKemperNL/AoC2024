@@ -2,6 +2,6 @@
 
 open System.Text.RegularExpressions
 
-let res = Regex("regex").Match("regex doet dingen")
+let res = Regex("d'").Match("Wat is d'it")
 printfn "Test"
 printfn $"{res.Success}"
