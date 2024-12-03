@@ -1,2 +1,7 @@
 ﻿// For more information see https://aka.ms/fsharp-console-apps
-printfn "Hello from F#"
+
+open System.Text.RegularExpressions
+
+let res = Regex("regex").Match("regex doet dingen")
+printfn "Test"
+printfn $"{res.Success}"

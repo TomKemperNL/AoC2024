@@ -6,6 +6,8 @@
     <IsPackable>false</IsPackable>
     <GenerateProgramFile>false</GenerateProgramFile>
     <IsTestProject>true</IsTestProject>
+    <AssemblyName>AoC2024.Tests</AssemblyName>
+    <RootNamespace>AoC2024.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,10 +15,14 @@
     <Content Include="Day1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Compile Include="Day2.fs" />
     <Content Include="Day2.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Compile Include="Day2.fs" />
+    <Compile Include="Day3.fs" />
+    <Content Include="Day3.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Compile Include="Program.fs" />
   </ItemGroup>
 
