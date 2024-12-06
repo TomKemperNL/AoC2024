@@ -38,7 +38,12 @@ let day5Example () =
     let exampleInput = exampleInput.Split("\r\n")
     Assert.AreEqual(143, day5 (List.ofArray exampleInput))
     ()
-    
+
+[<Test>]
+let day5BExample () =
+    let exampleInput = exampleInput.Split("\r\n")
+    Assert.AreEqual(123, day5B (List.ofArray exampleInput))
+    ()    
 
 let input = File.ReadAllLines "./Day5.txt" |> Array.toList
 
@@ -46,3 +51,8 @@ let input = File.ReadAllLines "./Day5.txt" |> Array.toList
 let day5A () =
     Assert.AreEqual(4959, day5 input)
     ()
+    
+[<Test>]
+let day5B () =
+    Assert.AreEqual(0, day5B input)
+    ()    
