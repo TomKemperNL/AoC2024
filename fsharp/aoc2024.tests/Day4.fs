@@ -8,16 +8,7 @@ open NUnit.Framework
 let Setup () = ()
 
 
-let exampleInput = """MMMSXXMASM
-MSAMXMSMSA
-AMXSXMAAMM
-MSAMASMSMX
-XMASAMXAMM
-XXAMMXXAMA
-SMSMSASXSS
-SAXAMASAAA
-MAMMMXMMMM
-MXMXAXMASX"""
+
 
 let miniGrid = [|
     [| 0; 1 |]
@@ -64,12 +55,27 @@ let weirdStuff (s: string, t:string, e: int array) =
     let source = s.ToCharArray()
     let found = Array.findPatternIndexes source target
     Assert.AreEqual(e, List.toArray found)
-    
+
+let exampleInput = """MMMSXXMASM
+MSAMXMSMSA
+AMXSXMAAMM
+MSAMASMSMX
+XMASAMXAMM
+XXAMMXXAMA
+SMSMSASXSS
+SAXAMASAAA
+MAMMMXMMMM
+MXMXAXMASX"""
+
 [<Test>]
 let day4Example () =    
     Assert.AreEqual(18, day4 (exampleInput.Split("\r\n") |> Array.toList))
     ()
 
+[<Test>]
+let day4BExample () =    
+    Assert.AreEqual(9, day4B (exampleInput.Split("\r\n") |> Array.toList))
+    ()
 
 let input = File.ReadAllLines "./Day4.txt" |> Array.toList
 
@@ -77,3 +83,8 @@ let input = File.ReadAllLines "./Day4.txt" |> Array.toList
 let day4A () =
     Assert.AreEqual(2618, day4 input)
     ()
+    
+[<Test>]
+let day4B () =
+    Assert.AreEqual(2011, day4B input)
+    ()    

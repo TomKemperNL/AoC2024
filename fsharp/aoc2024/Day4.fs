@@ -1,6 +1,7 @@
 ﻿module AoC2024.Day4
 
 open System
+open Shared
 
 type Grid<'T> = 'T[][]
 
@@ -24,6 +25,14 @@ module Grid =
         if (0 <= y && y < max) && (0 <= x && x < max) then
             Some (g[y][x])
         else None
+   
+    let findCoord (g: Grid<'T>) (f: (int*int) -> 'T -> bool) =
+        seq {
+            for x in 0 .. (g.Length - 1) do
+                for y in 0 .. (g.Length - 1) do
+                    if f (x,y) (g.[y].[x]) then
+                        yield (x, y)
+        }
             
     let diagonalLR (g: Grid<'T>) xoffset =
         seq {
@@ -94,6 +103,21 @@ let day4 input =
     let xmasses = xmasFoundRow + xmasFoundCol + xmasFoundDiag + xmasFoundDiag2
     let samxes =  samxFoundRow + samxFoundCol + samxFoundDiag + samxFoundDiag2
     xmasses + samxes
-    
+   
+let isXmas (g: Grid<Char>) (x, y) c=
+    match c with
+    | 'A' -> 
+        let neighbours = [(x - 1, y - 1); (x - 1, y + 1); (x + 1, y + 1); (x + 1, y - 1)]
+        let neighbourChars = List.map (fun (x,y) -> Grid.cell g x y) neighbours |> List.choose id
+        match neighbourChars with
+        | ['M'; 'M'; 'S'; 'S'] -> true
+        | ['S'; 'M'; 'M'; 'S'] -> true
+        | ['M'; 'S'; 'S'; 'M'] -> true
+        | ['S'; 'S'; 'M'; 'M'] -> true
+        | _ -> false
+    | _ -> false
        
-    
+let day4B input =
+    let grid = parse input
+    let checkXMas = isXmas grid
+    Grid.findCoord grid checkXMas |> Seq.length 
