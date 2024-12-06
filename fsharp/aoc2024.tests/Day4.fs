@@ -25,11 +25,18 @@ let miniGrid = [|
 |]
 
 [<Test>]
-let computeDiagonals () =
-    let ds = Grid.diagonals miniGrid
+let computeDiagonalsLR () =
+    let ds = Grid.diagonalsLR miniGrid
     Assert.AreEqual(ds[0],[| 2 |])
     Assert.AreEqual(ds[1],[| 0;3 |])
     Assert.AreEqual(ds[2],[| 1 |])
+    
+[<Test>]
+let computeDiagonalsRL () =
+    let ds = Grid.diagonalsRL miniGrid
+    Assert.AreEqual(ds[0],[| 0 |])
+    Assert.AreEqual(ds[1],[| 1;2 |])
+    Assert.AreEqual(ds[2],[| 3 |])
     
 [<Test>]
 let computeColumns () =
@@ -41,35 +48,22 @@ let computeColumns () =
 let findInArrays () =
     let source = [|0;1;2;3;0;1;2;3|]
     let found = Array.findPatternIndexes source [|1;2;3|] 
-    Assert.AreEqual([|1;5|], found |> List.toArray)    
-
-[<Test>]
-let weirdStuff4 () =
-    let target = "XMAS".ToCharArray()
-    let source = "XXMAS".ToCharArray()
-    let found = Array.findPatternIndexes source target
-    Assert.AreEqual(1, found[0])
-
-[<Test>]
-let weirdStuff () =
+    Assert.AreEqual([|1;5|], found |> List.toArray)
     let target = "XMAS".ToCharArray()
     let source = "XMASAMX.MM".ToCharArray()
     let found = Array.findPatternIndexes source target
     Assert.AreEqual(0, found[0])
-    
-[<Test>]
-let weirdStuff2 () =
-    let target = "XMAS".ToCharArray()
-    let source = "....XXMAS.".ToCharArray()
+
+[<TestCase("XMASAMX.MM", "XMAS", [|0|])>]
+[<TestCase("....XXMAS.", "XMAS", [|5|])>]
+[<TestCase(".X.X.XMASX", "XMAS", [|5|])>]
+[<TestCase("XXXMASX", "XMAS", [|2|])>]
+[<TestCase("XXXMASXMAS", "XMAS", [|2;6|])>]
+let weirdStuff (s: string, t:string, e: int array) =
+    let target = t.ToCharArray()
+    let source = s.ToCharArray()
     let found = Array.findPatternIndexes source target
-    Assert.AreEqual(5, found[0])
-    
-[<Test>]
-let weirdStuff3 () =
-    let target = "XMAS".ToCharArray()
-    let source = ".X.X.XMASX".ToCharArray()
-    let found = Array.findPatternIndexes source target
-    Assert.AreEqual(5, found[0])    
+    Assert.AreEqual(e, List.toArray found)
     
 [<Test>]
 let day4Example () =    
@@ -81,5 +75,5 @@ let input = File.ReadAllLines "./Day4.txt" |> Array.toList
 
 [<Test>]
 let day4A () =
-    Assert.AreEqual(0, day4 input)
+    Assert.AreEqual(2618, day4 input)
     ()

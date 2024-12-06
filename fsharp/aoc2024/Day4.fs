@@ -25,15 +25,26 @@ module Grid =
             Some (g[y][x])
         else None
             
-    let diagonal (g: Grid<'T>) xoffset =
+    let diagonalLR (g: Grid<'T>) xoffset =
         seq {
             for i in 0 .. (g.Length - 1) do                
                 yield cell g (i + xoffset) i
         } |> Seq.choose id |> Seq.toArray
     
-    let diagonals (g: Grid<'T>) =
+    let diagonalsLR (g: Grid<'T>) =
         let offSet = g.Length - 1
-        seq { for xoffset in (-1 * offSet)..offSet -> diagonal g xoffset} |> Seq.toArray
+        seq { for xoffset in (-1 * offSet)..offSet -> diagonalLR g xoffset} |> Seq.toArray
+    
+    let diagonalRL (g: Grid<'T>) xoffset =
+        seq {
+            for i in 0 .. (g.Length - 1)  do                
+                yield cell g ((-1 * i) + xoffset) i
+        } |> Seq.choose id |> Seq.toArray
+    
+    let diagonalsRL (g: Grid<'T>) =
+        let maxOffSet = (2 * g.Length) - 1
+        seq { for xoffset in 0..maxOffSet -> diagonalRL g xoffset} |> Seq.toArray
+    
         
 
 let parse (lines: string list) : Grid<Char> =
@@ -57,27 +68,31 @@ module Array =
                 | (ph :: pt) when h = ph ->
                     findInList t pattern pt (ixc+1) ixf found
                 | _ ->
-                    findInList (h::t) pattern pattern (ixc) (ixc) found
+                    if h = List.head pattern then
+                        findInList t pattern (List.tail pattern) (ixc+1) ixc found
+                    else 
+                        findInList t pattern pattern (ixc+1) (ixc+1) found
+                    
         findInList sourceAsList patternAsList patternAsList 0 0 [] |> List.rev
 
 let day4 input =
     let grid = parse input
-    let patterns = ["XMAS"; "SAMX"]
     let rows = Grid.rows grid
     let columns = Grid.columns grid
-    let diagonals = Grid.diagonals grid
-    
-    let sources = Array.collect id [|rows;columns;diagonals|] |> Array.toList
+    let diagonalsLR = Grid.diagonalsLR grid
+    let diagonalsRL = Grid.diagonalsRL grid
     
     let xmasFoundRow = Array.map (fun s -> Array.findPatternIndexes s ("XMAS".ToCharArray())) rows |> Array.sumBy (List.length)
     let xmasFoundCol = Array.map (fun s -> Array.findPatternIndexes s ("XMAS".ToCharArray())) columns |> Array.sumBy (List.length)
-    let xmasFoundDiag = Array.map (fun s -> Array.findPatternIndexes s ("XMAS".ToCharArray())) diagonals |> Array.sumBy (List.length)
+    let xmasFoundDiag = Array.map (fun s -> Array.findPatternIndexes s ("XMAS".ToCharArray())) diagonalsLR |> Array.sumBy (List.length)
+    let xmasFoundDiag2 = Array.map (fun s -> Array.findPatternIndexes s ("XMAS".ToCharArray())) diagonalsRL |> Array.sumBy (List.length)
     let samxFoundRow = Array.map (fun s -> Array.findPatternIndexes s ("SAMX".ToCharArray())) rows |> Array.sumBy (List.length)        
     let samxFoundCol = Array.map (fun s -> Array.findPatternIndexes s ("SAMX".ToCharArray())) columns |> Array.sumBy (List.length)
-    let samxFoundDiag = Array.map (fun s -> Array.findPatternIndexes s ("SAMX".ToCharArray())) diagonals |> Array.sumBy (List.length)
+    let samxFoundDiag = Array.map (fun s -> Array.findPatternIndexes s ("SAMX".ToCharArray())) diagonalsLR |> Array.sumBy (List.length)
+    let samxFoundDiag2 = Array.map (fun s -> Array.findPatternIndexes s ("SAMX".ToCharArray())) diagonalsRL |> Array.sumBy (List.length)
     
-    let xmasses = xmasFoundRow + xmasFoundCol + xmasFoundDiag
-    let samxes =  samxFoundRow + samxFoundCol + samxFoundDiag
+    let xmasses = xmasFoundRow + xmasFoundCol + xmasFoundDiag + xmasFoundDiag2
+    let samxes =  samxFoundRow + samxFoundCol + samxFoundDiag + samxFoundDiag2
     xmasses + samxes
     
        
