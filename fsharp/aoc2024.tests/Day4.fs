@@ -43,6 +43,12 @@ let findInArrays () =
     let found = Array.findPatternIndexes source [|1;2;3|] 
     Assert.AreEqual([|1;5|], found |> List.toArray)    
 
+[<Test>]
+let weirdStuff4 () =
+    let target = "XMAS".ToCharArray()
+    let source = "XXMAS".ToCharArray()
+    let found = Array.findPatternIndexes source target
+    Assert.AreEqual(1, found[0])
 
 [<Test>]
 let weirdStuff () =

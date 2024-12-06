@@ -43,6 +43,7 @@ module Array =
     let findPatternIndexes array pattern =
         let sourceAsList = List.ofArray array
         let patternAsList = List.ofArray pattern
+        
         let rec findInList lst pattern patrec ixc ixf found =
             match lst with
             | [] ->
@@ -56,7 +57,7 @@ module Array =
                 | (ph :: pt) when h = ph ->
                     findInList t pattern pt (ixc+1) ixf found
                 | _ ->
-                    findInList t pattern pattern (ixc+1) (ixc+1) found
+                    findInList (h::t) pattern pattern (ixc) (ixc) found
         findInList sourceAsList patternAsList patternAsList 0 0 [] |> List.rev
 
 let day4 input =
