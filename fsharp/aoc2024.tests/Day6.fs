@@ -15,10 +15,14 @@ let exampleInput = """....#.....
 ......#..."""
 
 [<Test>]
-let day6Example () =    
+let day6AExample () =    
     Assert.AreEqual(41, day6 (exampleInput.Split("\r\n") |> Array.toList))
     ()
-    
+
+[<Test>]
+let day6BExample () =
+    Assert.AreEqual(6, day6B (exampleInput.Split("\r\n") |> Array.toList))
+    ()       
 
 let input = File.ReadAllLines "./Day6.txt" |> Array.toList
 
@@ -29,5 +33,5 @@ let day6A () =
     
 [<Test>]
 let day6B () =
-    Assert.AreEqual(6, day6B input)
+    Assert.AreEqual(0, day6B input)
     ()    

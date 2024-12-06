@@ -69,17 +69,26 @@ module Guard =
         match Map.cell map nx ny  with
         | None -> None
         | Some Empty ->
-            Some (map, (nx, ny), g)
+            Some ((nx, ny), g)
         | Some Obstacle ->
-            Some (map, (x,y), rotate g)
+            Some ((x,y), rotate g)
         | Some (Guard _) ->
-            Some (map, (nx, ny), g) //Treat startposition as empty
+            Some ((nx, ny), g) //Treat startposition as empty
         
     let rec walk m (x,y) g =
         match step m (x,y) g with
         | None -> []
-        | Some (m', (x', y'), g') -> (x', y') :: walk m' (x', y') g'
+        | Some ((nx, ny), ng) -> (nx, ny) :: walk m (nx, ny) ng
     
+    let rec walkB m (x,y) g =
+        match step m (x,y) g with
+        | None -> []
+        | Some ((nx, ny), ng) -> (nx, ny, ng) :: walkB m (nx, ny) ng
+
+    let obstacleCandidate map visitedWithDir ((fromX, fromY, fromDir), (toX, toY))=
+        let nextDir = rotate fromDir
+        let nextX, nextY = next (fromX, fromY) nextDir        
+        List.contains (nextX, nextY, nextDir) visitedWithDir && Map.cell map toX toY = Some Empty
 
 let day6 (input: string list) =
     let map = parse input
@@ -91,5 +100,12 @@ let day6 (input: string list) =
     
 let day6B (input: string list) =
     let map = parse input
-    let guard = Map.findGuard map
-    42 //Geeen idee nog
+    let guardX, guardY = Map.findGuard map
+    let visitedWithDirection = Guard.walkB map (guardX, guardY) Guard.Up
+    let visitedWithDirection = (guardX, guardY, Guard.Up) :: visitedWithDirection
+    
+    let obstacleCandidates = List.map (fun (x, y, g) -> ((x, y, g), Guard.next (x,y) g)) visitedWithDirection
+    let viableCandidates = List.filter (Guard.obstacleCandidate map visitedWithDirection) obstacleCandidates
+    let viableCoordinates = List.map snd viableCandidates
+    List.distinct viableCoordinates |> List.length
+    
