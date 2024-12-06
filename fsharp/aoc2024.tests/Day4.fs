@@ -45,6 +45,27 @@ let findInArrays () =
 
 
 [<Test>]
+let weirdStuff () =
+    let target = "XMAS".ToCharArray()
+    let source = "XMASAMX.MM".ToCharArray()
+    let found = Array.findPatternIndexes source target
+    Assert.AreEqual(0, found[0])
+    
+[<Test>]
+let weirdStuff2 () =
+    let target = "XMAS".ToCharArray()
+    let source = "....XXMAS.".ToCharArray()
+    let found = Array.findPatternIndexes source target
+    Assert.AreEqual(5, found[0])
+    
+[<Test>]
+let weirdStuff3 () =
+    let target = "XMAS".ToCharArray()
+    let source = ".X.X.XMASX".ToCharArray()
+    let found = Array.findPatternIndexes source target
+    Assert.AreEqual(5, found[0])    
+    
+[<Test>]
 let day4Example () =    
     Assert.AreEqual(18, day4 (exampleInput.Split("\r\n") |> Array.toList))
     ()

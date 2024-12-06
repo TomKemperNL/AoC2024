@@ -67,8 +67,16 @@ let day4 input =
     let diagonals = Grid.diagonals grid
     
     let sources = Array.collect id [|rows;columns;diagonals|] |> Array.toList
-    let xmasses = List.map (fun s -> Array.findPatternIndexes s ("XMAS".ToCharArray())) sources |> List.concat |> List.length
-    let samxes = List.map (fun s -> Array.findPatternIndexes s ("SAMX".ToCharArray())) sources |> List.concat |> List.length
+    
+    let xmasFoundRow = Array.map (fun s -> Array.findPatternIndexes s ("XMAS".ToCharArray())) rows |> Array.sumBy (List.length)
+    let xmasFoundCol = Array.map (fun s -> Array.findPatternIndexes s ("XMAS".ToCharArray())) columns |> Array.sumBy (List.length)
+    let xmasFoundDiag = Array.map (fun s -> Array.findPatternIndexes s ("XMAS".ToCharArray())) diagonals |> Array.sumBy (List.length)
+    let samxFoundRow = Array.map (fun s -> Array.findPatternIndexes s ("SAMX".ToCharArray())) rows |> Array.sumBy (List.length)        
+    let samxFoundCol = Array.map (fun s -> Array.findPatternIndexes s ("SAMX".ToCharArray())) columns |> Array.sumBy (List.length)
+    let samxFoundDiag = Array.map (fun s -> Array.findPatternIndexes s ("SAMX".ToCharArray())) diagonals |> Array.sumBy (List.length)
+    
+    let xmasses = xmasFoundRow + xmasFoundCol + xmasFoundDiag
+    let samxes =  samxFoundRow + samxFoundCol + samxFoundDiag
     xmasses + samxes
     
        
