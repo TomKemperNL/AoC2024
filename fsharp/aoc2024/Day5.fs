@@ -15,6 +15,7 @@ module OrderRule =
     
     let reorder (rules: OrderRule list) (update: Update) : Update =
         //Gejat van https://dev.to/ducaale/computing-permutations-of-a-list-in-f-1n6k
+        //(aangezien dit toch niet de echte oplossing gaat worden)
         let variants list =
             let rec inserts e = function
             | [] -> [[e]]

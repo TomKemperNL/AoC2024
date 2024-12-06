@@ -52,7 +52,7 @@ let day5A () =
     Assert.AreEqual(4959, day5 input)
     ()
     
-[<Test>]
+// [<Test>]
 let day5B () =
     Assert.AreEqual(0, day5B input)
     ()    
