@@ -34,6 +34,11 @@ module Map =
             | Guard _ -> true
             | _ -> false        
         find m hasGuard
+        
+    let variant m (obsX, obsY) =
+        let copy = Array.map (Array.copy) m
+        copy.[obsY].[obsX] <- Obstacle
+        copy
 
 let parse (lines: string list) : Map =    
     let charToItem c = 
@@ -80,16 +85,40 @@ module Guard =
         | None -> []
         | Some ((nx, ny), ng) -> (nx, ny) :: walk m (nx, ny) ng
     
-    let rec walkB m (x,y) g =
-        match step m (x,y) g with
-        | None -> []
-        | Some ((nx, ny), ng) -> (nx, ny, ng) :: walkB m (nx, ny) ng
-
-    let obstacleCandidate map visitedWithDir ((fromX, fromY, fromDir), (toX, toY))=
-        let nextDir = rotate fromDir
-        let nextX, nextY = next (fromX, fromY) nextDir        
-        List.contains (nextX, nextY, nextDir) visitedWithDir && Map.cell map toX toY = Some Empty
-
+    
+    let willWalkIntoVisited map visited (x, y) g =
+        let rec willWalkIntoVisited (x, y) g =
+            match step map (x,y) g with
+            | None -> false
+            | Some ((nx, ny), ng) ->
+                if List.contains ((nx, ny), ng) visited then
+                    true
+                else
+                    willWalkIntoVisited (nx, ny) ng
+        willWalkIntoVisited (x, y) g
+    
+    let walkB m (x, y) g =
+        let rec walkBRec visited obstacles (x, y) g =           
+            match step m (x,y) g with
+            | None -> visited, obstacles
+            | Some ((nx, ny), ng) ->
+                let dirIfObstactle = rotate g                
+                match step m (x,y) (dirIfObstactle) with
+                | None ->
+                    let newVisited = ((nx, ny), ng) :: visited
+                    walkBRec newVisited obstacles (nx, ny) ng
+                | Some ((nextIfObstacleX, nextIfObstacleY), nextIfObstacleDir) ->
+                    let variant = Map.variant m (nx, ny)                    
+                    if willWalkIntoVisited variant visited (x,y) g then
+                        let newVisited = ((nx, ny), ng) :: visited
+                        let newObstacles = (nx, ny) :: obstacles
+                        walkBRec newVisited newObstacles (nx, ny) ng
+                    else
+                        let newVisited = ((nx, ny), ng) :: visited
+                        walkBRec newVisited obstacles (nx, ny) ng
+    
+        walkBRec [((x,y),g)] [] (x,y) g
+    
 let day6 (input: string list) =
     let map = parse input
     let guard = Map.findGuard map
@@ -101,11 +130,8 @@ let day6 (input: string list) =
 let day6B (input: string list) =
     let map = parse input
     let guardX, guardY = Map.findGuard map
-    let visitedWithDirection = Guard.walkB map (guardX, guardY) Guard.Up
-    let visitedWithDirection = (guardX, guardY, Guard.Up) :: visitedWithDirection
+    let (visited, obstacles) = Guard.walkB map (guardX, guardY) Guard.Up    
+    let visitedLengthToCheck = List.map fst visited |> List.distinct |> List.length
+    List.length obstacles
     
-    let obstacleCandidates = List.map (fun (x, y, g) -> ((x, y, g), Guard.next (x,y) g)) visitedWithDirection
-    let viableCandidates = List.filter (Guard.obstacleCandidate map visitedWithDirection) obstacleCandidates
-    let viableCoordinates = List.map snd viableCandidates
-    List.distinct viableCoordinates |> List.length
     
