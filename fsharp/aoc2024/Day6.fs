@@ -87,15 +87,20 @@ module Guard =
     
     
     let willWalkIntoVisited map visited (x, y) g =
-        let rec willWalkIntoVisited (x, y) g =
-            match step map (x,y) g with
-            | None -> false
-            | Some ((nx, ny), ng) ->
-                if List.contains ((nx, ny), ng) visited then
-                    true
-                else
-                    willWalkIntoVisited (nx, ny) ng
-        willWalkIntoVisited (x, y) g
+        let visitedSet = Set.ofList visited
+        
+        let rec willWalkIntoVisited (x, y) g steps =
+            if steps > 500 then
+                false
+            else
+                match step map (x,y) g with
+                | None -> false
+                | Some ((nx, ny), ng) ->
+                    if Set.contains ((nx, ny), ng) visitedSet then
+                        true
+                    else
+                        willWalkIntoVisited (nx, ny) ng (steps + 1)
+        willWalkIntoVisited (x, y) g 0
     
     let walkB m (x, y) g =
         let rec walkBRec visited obstacles (x, y) g =           

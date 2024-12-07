@@ -33,3 +33,12 @@ module String =
     let split (pattern:string) (s: string) =
         let parts = s.Split pattern
         List.ofArray parts
+        
+module List =
+     //Gejat van https://dev.to/ducaale/computing-permutations-of-a-list-in-f-1n6k
+    //(aangezien dit toch niet de echte oplossing gaat worden)
+    let variants list =
+        let rec inserts e = function
+        | [] -> [[e]]
+        | x::xs as list -> (e::list)::(inserts e xs |> List.map (fun xs' -> x::xs'))
+        List.fold (fun accum x -> List.collect (inserts x) accum) [[]] list

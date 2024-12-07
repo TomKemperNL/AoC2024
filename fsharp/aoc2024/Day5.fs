@@ -1,5 +1,7 @@
 ﻿module AoC2024.Day5
 
+open Shared
+
 type OrderRule = int * int
 type Update = int list
 
@@ -14,15 +16,9 @@ module OrderRule =
         | None -> true
     
     let reorder (rules: OrderRule list) (update: Update) : Update =
-        //Gejat van https://dev.to/ducaale/computing-permutations-of-a-list-in-f-1n6k
-        //(aangezien dit toch niet de echte oplossing gaat worden)
-        let variants list =
-            let rec inserts e = function
-            | [] -> [[e]]
-            | x::xs as list -> (e::list)::(inserts e xs |> List.map (fun xs' -> x::xs'))
-            List.fold (fun accum x -> List.collect (inserts x) accum) [[]] list
+       
         
-        let allVariants = variants update
+        let allVariants = List.variants update
         List.find (fun perm -> List.forall (fun r -> satisfies r perm) rules) allVariants
 
 let parse (input: string list) =

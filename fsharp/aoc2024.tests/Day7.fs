@@ -15,14 +15,25 @@ let exampleInput = """190: 10 19
 292: 11 6 16 20"""
 
 [<Test>]
+let canParseInput () =
+    let expected = {
+        Outcome = 3267
+        Parts = [81; 40; 27]
+    }
+  
+    Assert.AreEqual(expected, parse "3267: 81 40 27")
+    ()
+
+
+[<Test>]
 let day7Example () =    
-    Assert.AreEqual(3749, day7 (exampleInput.Split("\r\n") |> Array.toList))
+    Assert.AreEqual(3749L, day7 (exampleInput.Split("\r\n") |> Array.toList))
     ()
 
 
 let input = File.ReadAllLines "./Day7.txt" |> Array.toList
 
-// [<Test>]
+[<Test>]
 let day7A () =
-    Assert.AreEqual(0, day7 input)
+    Assert.AreEqual(0303766880536L, day7 input)
     ()
