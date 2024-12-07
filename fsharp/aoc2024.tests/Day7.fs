@@ -30,6 +30,11 @@ let day7Example () =
     Assert.AreEqual(3749L, day7 (exampleInput.Split("\r\n") |> Array.toList))
     ()
 
+[<Test>]
+let day7BExample () =    
+    Assert.AreEqual(11387L, day7B (exampleInput.Split("\r\n") |> Array.toList))
+    ()
+
 
 let input = File.ReadAllLines "./Day7.txt" |> Array.toList
 
@@ -37,3 +42,8 @@ let input = File.ReadAllLines "./Day7.txt" |> Array.toList
 let day7A () =
     Assert.AreEqual(0303766880536L, day7 input)
     ()
+    
+[<Test>]
+let day7B () =
+    Assert.AreEqual(337041851384440L, day7B input)
+    ()    
