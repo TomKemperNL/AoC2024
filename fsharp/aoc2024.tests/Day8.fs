@@ -52,10 +52,36 @@ let exampleInput = """......#....#
 let day8Example () =
     Assert.AreEqual(14, day8 (exampleInput.Split("\r\n") |> Array.toList))
     ()
+
+let tinyExampleB = """T....#....
+...T......
+.T....#...
+.........#
+..#.......
+..........
+...#......
+..........
+....#.....
+.........."""
+
+[<Test>]
+let tinyB () =
+    Assert.AreEqual(9, day8B (tinyExampleB.Split("\r\n") |> Array.toList))
+    ()
+
+[<Test>]
+let day8BExample () =
+    Assert.AreEqual(34, day8B (exampleInput.Split("\r\n") |> Array.toList))
+    ()
     
 let input = File.ReadAllLines "./Day8.txt" |> Array.toList
 
 [<Test>]
 let day8A () =
     Assert.AreEqual(376, day8 input)
-    ()    
+    ()
+    
+[<Test>]
+let day8B () =
+    Assert.AreEqual(1352, day8B input)
+    ()        
