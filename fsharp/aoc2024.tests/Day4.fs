@@ -1,7 +1,9 @@
 ﻿module AoC2024.Day4.Tests
 
 open System.IO
+open AoC2024
 open NUnit.Framework
+open Shared
 
 
 [<SetUp>]

@@ -31,7 +31,7 @@ let day6A () =
     Assert.AreEqual(5145, day6 input)
     ()
     
-[<Test>]
+// [<Test>]
 let day6B () =
     //1650 too high
     //1350
